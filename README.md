@@ -150,13 +150,43 @@ This module also includes a potentiometer that will fix the threshold value, & t
 
 
 ##  Program 
-
+````
+#include "main.h"
+#include"stdio.h"
+uint32_t adcvalue;
+#if defined (_ICCARM_) || defined (__ARMCC_VERSION)
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#elif defined(_GNUC_)
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif
+PUTCHAR_PROTOTYPE
+{
+HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+return ch;
+}
+while(1)
+{
+HAL_ADC_Start(&hadc1);
+HAL_ADC_PollForConversion(&hadc1,100);
+adcvalue = HAL_ADC_GetValue(&hadc1);
+HAL_ADC_Stop(&hadc1);
+HAL_Delay(500);
+printf("ADC VALUE:%ld\n",adcvalue);
+}
+````
 
  
 
-## Result :
  
 ## Output  :
+![image](https://github.com/user-attachments/assets/2d0d2c9e-163f-4fe8-bc41-4fdb4e05064f)
+![image](https://github.com/user-attachments/assets/e0deda2f-438e-4595-b5eb-7c63cf3f7dba)
+
+
+
+## Result :
+ADC channel for interfacing an analog sensor is configured and the values on the serial utility port is measured
+
 
 
 
